@@ -20,12 +20,12 @@ $ composer require zapheus/slytherin-bridge
 ## Usage
 
 ``` php
-use Acme\Providers\TestServiceProvider;
+use Acme\Integrations\TestIntegration;
 use Zapheus\Bridge\Slytherin\Provider;
 use Zapheus\Container\Container;
 use Zapheus\Provider\FrameworkProvider;
 
-$test = TestServiceProvider::class;
+$test = TestIntegration::class;
 
 $framework = new FrameworkProvider;
 
