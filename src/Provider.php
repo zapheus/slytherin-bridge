@@ -27,7 +27,7 @@ class Provider implements ProviderInterface
     /**
      * Initializes the provider instance.
      *
-     * @param \Rougin\Slytherin\Integration\IntegrationInterface[] $integration
+     * @param \Rougin\Slytherin\Integration\IntegrationInterface[] $integrations
      */
     public function __construct($integrations)
     {
