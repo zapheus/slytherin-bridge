@@ -20,18 +20,19 @@ $ composer require zapheus/slytherin-bridge
 ## Usage
 
 ``` php
-use Acme\Integrations\TestIntegration;
+use Acme\Integrations\AuthIntegration;
+use Acme\Integrations\RoleIntegration;
 use Zapheus\Bridge\Slytherin\Provider;
 use Zapheus\Container\Container;
 use Zapheus\Provider\FrameworkProvider;
 
-$test = TestIntegration::class;
+$providers = array(new AuthIntegration, new RoleIntegration);
 
-$framework = new FrameworkProvider;
-
-$provider = new Provider($test);
+$provider = new Provider($providers);
 
 $container = $provider->register(new Container);
+
+$framework = new FrameworkProvider;
 
 $container = $framework->register($container);
 ```

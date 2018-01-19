@@ -3,6 +3,7 @@
 namespace Zapheus\Bridge\Slytherin;
 
 use Rougin\Slytherin\Template\RendererIntegration;
+use Rougin\Slytherin\Http\HttpIntegration;
 use Zapheus\Container\Container;
 use Zapheus\Provider\Configuration;
 use Zapheus\Provider\FrameworkProvider;
@@ -15,6 +16,8 @@ use Zapheus\Provider\FrameworkProvider;
  */
 class ProviderTest extends \PHPUnit_Framework_TestCase
 {
+    const RENDERER = 'Rougin\Slytherin\Template\RendererInterface';
+
     /**
      * @var \Zapheus\Container\WritableInterface
      */
@@ -39,7 +42,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $message = 'Slytherin Renderer is not yet installed.';
 
-        $renderer = 'Rougin\Slytherin\Template\Renderer';
+        $renderer = 'Rougin\Slytherin\Template\TwigRenderer';
 
         class_exists($renderer) || $this->markTestSkipped($message);
 
@@ -47,13 +50,13 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
 
         $config->set('app.views', __DIR__ . '/Fixture');
 
-        $container->set(Provider::CONFIG, $config);
-
-        $this->provider = new Provider(new RendererIntegration);
+        $this->container = $container->set(Provider::CONFIG, $config);
 
         $this->framework = new FrameworkProvider;
 
-        $this->container = $container;
+        $providers = array(new HttpIntegration, new RendererIntegration);
+
+        $this->provider = new Provider($providers);
     }
 
     /**
@@ -63,27 +66,25 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegisterMethod()
     {
-        $class = 'Rougin\Slytherin\Container\Container';
-
         $container = $this->provider->register($this->container);
 
         $container = $this->framework->register($container);
 
-        $renderer = 'Rougin\Slytherin\Template\RendererInterface';
+        $renderer = $container->get(self::RENDERER);
 
         $expected = 'Hello world';
 
-        $result = $container->get($renderer)->render('HelloWorld');
+        $result = $renderer->render('HelloWorld');
 
         $this->assertEquals($expected, $result);
     }
 
     /**
-     * Tests BridgeContainer::has from ProviderInterface::register.
+     * Tests ContainerInterface::has from ProviderInterface::register.
      *
      * @return void
      */
-    public function testHasMethodOfSlytherinContainerFromRegisterMethod()
+    public function testHasMethodOfContainerFromRegisterMethod()
     {
         $container = $this->provider->register($this->container);
 

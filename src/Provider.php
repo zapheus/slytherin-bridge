@@ -17,19 +17,21 @@ use Zapheus\Provider\ProviderInterface;
  */
 class Provider implements ProviderInterface
 {
+    const CONTAINER = 'Rougin\Slytherin\Container\Container';
+
     /**
-     * @var \Rougin\Slytherin\Integration\IntegrationInterface
+     * @var \Rougin\Slytherin\Integration\IntegrationInterface[]
      */
-    protected $integration;
+    protected $integrations;
 
     /**
      * Initializes the provider instance.
      *
-     * @param \Rougin\Slytherin\Integration\IntegrationInterface $integration
+     * @param \Rougin\Slytherin\Integration\IntegrationInterface[] $integration
      */
-    public function __construct(IntegrationInterface $integration)
+    public function __construct($integrations)
     {
-        $this->integration = $integration;
+        $this->integrations = $integrations;
     }
 
     /**
@@ -40,20 +42,16 @@ class Provider implements ProviderInterface
      */
     public function register(WritableInterface $container)
     {
-        $name = 'Rougin\Slytherin\Container\Container';
-
-        $slytherin = new Container;
-
-        $container->has($name) && $slytherin = $container->get($name);
-
-        $integration = $this->integration;
-
         $config = $container->get(ProviderInterface::CONFIG);
 
         $config = new SlytherinConfig($config->all());
 
-        $result = $integration->define($slytherin, $config);
+        $slytherin = new Container;
 
-        return $container->set($name, $result);
+        foreach ((array) $this->integrations as $item) {
+            $slytherin = $item->define($slytherin, $config);
+        }
+
+        return $container->set(self::CONTAINER, $slytherin);
     }
 }
