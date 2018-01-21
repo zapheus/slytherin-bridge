@@ -2,7 +2,7 @@
 
 namespace Zapheus\Bridge\Slytherin;
 
-use Rougin\Slytherin\Container\Container;
+use Rougin\Slytherin\Container\Container as SlytherinContainer;
 use Rougin\Slytherin\Integration\Configuration as SlytherinConfig;
 use Rougin\Slytherin\Integration\IntegrationInterface;
 use Zapheus\Container\WritableInterface;
@@ -44,9 +44,9 @@ class Provider implements ProviderInterface
     {
         $config = $container->get(ProviderInterface::CONFIG);
 
-        $config = new SlytherinConfig($config->all());
+        $slytherin = new SlytherinContainer;
 
-        $slytherin = new Container;
+        $config = new SlytherinConfig($config->all());
 
         foreach ((array) $this->integrations as $item) {
             $slytherin = $item->define($slytherin, $config);
