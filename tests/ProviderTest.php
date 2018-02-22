@@ -74,7 +74,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
 
         $expected = 'Hello world';
 
-        $result = $renderer->render('HelloWorld');
+        $result = $renderer->render('helloworld');
 
         $this->assertEquals($expected, $result);
     }
