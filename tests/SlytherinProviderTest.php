@@ -6,27 +6,23 @@ use Rougin\Slytherin\Template\RendererIntegration;
 use Rougin\Slytherin\Http\HttpIntegration;
 use Zapheus\Container\Container;
 use Zapheus\Provider\Configuration;
-use Zapheus\Provider\FrameworkProvider;
 
 /**
- * Provider Test
+ * Slytherin Provider Test
  *
  * @package Zapheus
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class ProviderTest extends \PHPUnit_Framework_TestCase
+class SlytherinProviderTest extends \PHPUnit_Framework_TestCase
 {
+    const CONTAINER = 'Rougin\Slytherin\Container\Container';
+
     const RENDERER = 'Rougin\Slytherin\Template\RendererInterface';
 
     /**
      * @var \Zapheus\Container\WritableInterface
      */
     protected $container;
-
-    /**
-     * @var \Zapheus\Provider\FrameworkProvider
-     */
-    protected $framework;
 
     /**
      * @var \Zapheus\Provider\ProviderInterface
@@ -40,23 +36,15 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $message = 'Slytherin Renderer is not yet installed.';
-
-        $renderer = 'Rougin\Slytherin\Template\TwigRenderer';
-
-        class_exists($renderer) || $this->markTestSkipped($message);
-
         list($config, $container) = array(new Configuration, new Container);
 
         $config->set('app.views', __DIR__ . '/Fixture');
 
-        $this->container = $container->set(Provider::CONFIG, $config);
-
-        $this->framework = new FrameworkProvider;
+        $this->container = $container->set(SlytherinProvider::CONFIG, $config);
 
         $providers = array(new HttpIntegration, new RendererIntegration);
 
-        $this->provider = new Provider($providers);
+        $this->provider = new SlytherinProvider($providers);
     }
 
     /**
@@ -68,7 +56,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->provider->register($this->container);
 
-        $container = $this->framework->register($container);
+        $container = $container->get(self::CONTAINER);
 
         $renderer = $container->get(self::RENDERER);
 
@@ -88,7 +76,7 @@ class ProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->provider->register($this->container);
 
-        $container = $this->framework->register($container);
+        $container = $container->get(self::CONTAINER);
 
         $renderer = 'Rougin\Slytherin\Template\RendererInterface';
 
