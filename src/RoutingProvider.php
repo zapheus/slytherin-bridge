@@ -2,8 +2,9 @@
 
 namespace Zapheus\Bridge\Slytherin;
 
-use Rougin\Slytherin\Routing\Router;
+use Rougin\Slytherin\Routing\Router as SlytherinRouter;
 use Rougin\Slytherin\Routing\RouterInterface;
+use Zapheus\Container\ContainerInterface;
 use Zapheus\Container\WritableInterface;
 use Zapheus\Provider\ProviderInterface;
 use Zapheus\Routing\Route;
@@ -46,22 +47,52 @@ class RoutingProvider implements ProviderInterface
      */
     public function register(WritableInterface $container)
     {
-        $zapheus = new ZapheusRouter;
+        $slytherin = $this->slytherin($container);
 
-        $router = $this->router;
+        $zapheus = $this->zapheus($container);
 
-        if ($this->router === null) {
-            $slytherin = $container->get(self::SLYTHERIN_CONTAINER);
-
-            $router = $slytherin->get(self::SLYTHERIN_ROUTER);
-        }
-
-        foreach ((array) $router->routes() as $route) {
+        foreach ((array) $slytherin->routes() as $route) {
             list($method, $uri, $handler) = (array) $route;
 
             $zapheus->add(new Route($method, $uri, $handler));
         }
 
         return $container->set(self::ZAPHEUS_ROUTER, $zapheus);
+    }
+
+    /**
+     * Returns the Slytherin router if it does exists from container.
+     *
+     * @param  \Zapheus\Container\ContainerInterface $container
+     * @return \Zapheus\Routing\RouterInterface
+     */
+    protected function slytherin(ContainerInterface $container)
+    {
+        $exists = $container->has(self::SLYTHERIN_CONTAINER);
+
+        $router = $this->router;
+
+        if ($this->router === null && $exists === true) {
+            $slytherin = $container->get(self::SLYTHERIN_CONTAINER);
+
+            return $slytherin->get((string) self::SLYTHERIN_ROUTER);
+        }
+
+        return $router === null ? new SlytherinRouter : $router;
+    }
+
+    /**
+     * Returns the Zapheus router if it does exists from container.
+     *
+     * @param  \Zapheus\Container\ContainerInterface $container
+     * @return \Zapheus\Routing\RouterInterface
+     */
+    protected function zapheus(ContainerInterface $container)
+    {
+        $exists = $container->has((string) self::ZAPHEUS_ROUTER);
+
+        $router = new ZapheusRouter;
+
+        return $exists ? $container->get(self::ZAPHEUS_ROUTER) : $router;
     }
 }

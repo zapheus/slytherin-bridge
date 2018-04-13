@@ -41,15 +41,13 @@ class RoutingProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $zapheus = new ZapheusContainer;
+        list($config, $router) = array(new Configuration, new Router);
 
-        $config = new Configuration;
+        $zapheus = new ZapheusContainer(array());
 
-        $slytherin = new SlytherinContainer;
+        $slytherin = new SlytherinContainer(array(), null);
 
         $this->container = $zapheus->set(RoutingProvider::CONFIG, $config);
-
-        $router = new Router;
 
         $router->get('/', 'TestController@index');
 
@@ -78,5 +76,21 @@ class RoutingProviderTest extends \PHPUnit_Framework_TestCase
         $result = $router->routes();
 
         $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests ProviderInterface::register without existing Slytherin router.
+     *
+     * @return void
+     */
+    public function testRegisterMethodWithoutSlytherinRouter()
+    {
+        $container = $this->provider->register(new ZapheusContainer);
+
+        $expected = (string) self::ZAPHEUS_ROUTER;
+
+        $result = $container->get(self::ZAPHEUS_ROUTER);
+
+        $this->assertInstanceOf($expected, $result);
     }
 }
