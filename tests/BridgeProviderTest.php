@@ -8,15 +8,13 @@ use Zapheus\Container\Container;
 use Zapheus\Provider\Configuration;
 
 /**
- * Slytherin Provider Test
+ * Bridge Provider Test
  *
  * @package Zapheus
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class SlytherinProviderTest extends \PHPUnit_Framework_TestCase
+class BridgeProviderTest extends \PHPUnit_Framework_TestCase
 {
-    const CONTAINER = 'Rougin\Slytherin\Container\Container';
-
     const RENDERER = 'Rougin\Slytherin\Template\RendererInterface';
 
     /**
@@ -38,13 +36,13 @@ class SlytherinProviderTest extends \PHPUnit_Framework_TestCase
     {
         list($config, $container) = array(new Configuration, new Container);
 
-        $config->set('app.views', __DIR__ . '/Fixture');
+        $config->set('app.views', (string) __DIR__ . '/Fixture');
 
-        $this->container = $container->set(SlytherinProvider::CONFIG, $config);
+        $this->container = $container->set(BridgeProvider::CONFIG, $config);
 
         $providers = array(new HttpIntegration, new RendererIntegration);
 
-        $this->provider = new SlytherinProvider($providers);
+        $this->provider = new BridgeProvider((array) $providers);
     }
 
     /**
@@ -56,11 +54,11 @@ class SlytherinProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->provider->register($this->container);
 
-        $container = $container->get(self::CONTAINER);
+        $container = $container->get(BridgeProvider::CONTAINER);
 
         $renderer = $container->get(self::RENDERER);
 
-        $expected = 'Hello world';
+        $expected = (string) 'Hello world';
 
         $result = $renderer->render('HelloWorld');
 
@@ -76,7 +74,7 @@ class SlytherinProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->provider->register($this->container);
 
-        $container = $container->get(self::CONTAINER);
+        $container = $container->get(BridgeProvider::CONTAINER);
 
         $renderer = 'Rougin\Slytherin\Template\RendererInterface';
 

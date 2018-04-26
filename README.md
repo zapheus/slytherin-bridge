@@ -22,19 +22,17 @@ $ composer require zapheus/slytherin-bridge
 ``` php
 use Acme\Integrations\AuthIntegration;
 use Acme\Integrations\RoleIntegration;
-use Zapheus\Bridge\Slytherin\Provider;
+use Rougin\Slytherin\Container\Container;
+use Zapheus\Bridge\Slytherin\BridgeProvider;
 use Zapheus\Container\Container;
-use Zapheus\Provider\FrameworkProvider;
 
 $providers = array(new AuthIntegration, new RoleIntegration);
 
-$provider = new Provider($providers);
+$provider = new BridgeProvider($providers);
 
 $container = $provider->register(new Container);
 
-$framework = new FrameworkProvider;
-
-$container = $framework->register($container);
+$slytherin = $container->get(BridgeProvider::CONTAINER);
 ```
 
 ## Change log

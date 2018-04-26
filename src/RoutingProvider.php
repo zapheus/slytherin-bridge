@@ -18,9 +18,7 @@ use Zapheus\Routing\Router as ZapheusRouter;
  */
 class RoutingProvider implements ProviderInterface
 {
-    const SLYTHERIN_CONTAINER = 'Rougin\Slytherin\Container\Container';
-
-    const SLYTHERIN_ROUTER = 'Rougin\Slytherin\Routing\RouterInterface';
+    const ROUTER = 'Rougin\Slytherin\Routing\RouterInterface';
 
     const ZAPHEUS_ROUTER = 'Zapheus\Routing\RouterInterface';
 
@@ -68,14 +66,14 @@ class RoutingProvider implements ProviderInterface
      */
     protected function slytherin(ContainerInterface $container)
     {
-        $exists = $container->has(self::SLYTHERIN_CONTAINER);
+        $exists = $container->has(BridgeProvider::CONTAINER);
 
         $router = $this->router;
 
         if ($this->router === null && $exists === true) {
-            $slytherin = $container->get(self::SLYTHERIN_CONTAINER);
+            $slytherin = $container->get(BridgeProvider::CONTAINER);
 
-            return $slytherin->get((string) self::SLYTHERIN_ROUTER);
+            return $slytherin->get((string) self::ROUTER);
         }
 
         return $router === null ? new SlytherinRouter : $router;

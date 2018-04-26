@@ -2,9 +2,7 @@
 
 namespace Zapheus\Bridge\Slytherin;
 
-use Rougin\Slytherin\Http\HttpIntegration;
 use Rougin\Slytherin\Routing\Router;
-use Rougin\Slytherin\Template\RendererIntegration;
 use Zapheus\Container\Container as ZapheusContainer;
 use Rougin\Slytherin\Container\Container as SlytherinContainer;
 use Zapheus\Provider\Configuration;
@@ -18,12 +16,6 @@ use Zapheus\Routing\Route;
  */
 class RoutingProviderTest extends \PHPUnit_Framework_TestCase
 {
-    const SLYTHERIN_CONTAINER = 'Rougin\Slytherin\Container\Container';
-
-    const SLYTHERIN_ROUTER = 'Rougin\Slytherin\Routing\RouterInterface';
-
-    const ZAPHEUS_ROUTER = 'Zapheus\Routing\RouterInterface';
-
     /**
      * @var \Zapheus\Container\WritableInterface
      */
@@ -51,9 +43,9 @@ class RoutingProviderTest extends \PHPUnit_Framework_TestCase
 
         $router->get('/', 'TestController@index');
 
-        $slytherin->set(self::SLYTHERIN_ROUTER, $router);
+        $slytherin->set(RoutingProvider::ROUTER, $router);
 
-        $this->container->set(self::SLYTHERIN_CONTAINER, $slytherin);
+        $this->container->set(BridgeProvider::CONTAINER, $slytherin);
 
         $this->provider = new RoutingProvider;
     }
@@ -67,7 +59,7 @@ class RoutingProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->provider->register($this->container);
 
-        $router = $container->get(self::ZAPHEUS_ROUTER);
+        $router = $container->get(RoutingProvider::ZAPHEUS_ROUTER);
 
         $handler = array((string) 'TestController', 'index');
 
@@ -87,9 +79,9 @@ class RoutingProviderTest extends \PHPUnit_Framework_TestCase
     {
         $container = $this->provider->register(new ZapheusContainer);
 
-        $expected = (string) self::ZAPHEUS_ROUTER;
+        $expected = (string) RoutingProvider::ZAPHEUS_ROUTER;
 
-        $result = $container->get(self::ZAPHEUS_ROUTER);
+        $result = $container->get(RoutingProvider::ZAPHEUS_ROUTER);
 
         $this->assertInstanceOf($expected, $result);
     }

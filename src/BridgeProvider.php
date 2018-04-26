@@ -10,12 +10,12 @@ use Zapheus\Provider\Configuration;
 use Zapheus\Provider\ProviderInterface;
 
 /**
- * Slytherin Provider
+ * Bridge Provider
  *
  * @package Zapheus
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class SlytherinProvider implements ProviderInterface
+class BridgeProvider implements ProviderInterface
 {
     const CONTAINER = 'Rougin\Slytherin\Container\Container';
 
