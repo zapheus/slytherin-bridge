@@ -13,7 +13,7 @@ use Zapheus\Provider\ProviderInterface;
  * Bridge Provider
  *
  * @package Zapheus
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class BridgeProvider implements ProviderInterface
 {
@@ -48,7 +48,8 @@ class BridgeProvider implements ProviderInterface
 
         $config = new SlytherinConfig($config->all());
 
-        foreach ((array) $this->integrations as $item) {
+        foreach ((array) $this->integrations as $item)
+        {
             $slytherin = $item->define($slytherin, $config);
         }
 
