@@ -14,7 +14,7 @@ use Zapheus\Routing\Router as ZapheusRouter;
  * Routing Provider
  *
  * @package App
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class RoutingProvider implements ProviderInterface
 {
@@ -49,7 +49,8 @@ class RoutingProvider implements ProviderInterface
 
         $zapheus = $this->zapheus($container);
 
-        foreach ((array) $slytherin->routes() as $route) {
+        foreach ((array) $slytherin->routes() as $route)
+        {
             list($method, $uri, $handler) = (array) $route;
 
             $zapheus->add(new Route($method, $uri, $handler));
@@ -70,7 +71,8 @@ class RoutingProvider implements ProviderInterface
 
         $router = $this->router;
 
-        if ($this->router === null && $exists === true) {
+        if ($this->router === null && $exists === true)
+        {
             $slytherin = $container->get(BridgeProvider::CONTAINER);
 
             return $slytherin->get((string) self::ROUTER);
