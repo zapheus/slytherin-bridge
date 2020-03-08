@@ -12,7 +12,7 @@ use Zapheus\Routing\Route;
  * Routing Provider Test
  *
  * @package Zapheus
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class RoutingProviderTest extends \PHPUnit_Framework_TestCase
 {
